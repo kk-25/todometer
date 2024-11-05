@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Testy jednostkowe (prawdopodobnie)
+      # Testy jednostkowe
       - name: Run unit tests
         run: npm test
 
@@ -46,7 +46,6 @@ jobs:
       - name: Npm audit test #w ramach SCA
         continue-on-error: true
         run: npm install --package-lock-only && npm audit --json > audit-report.json
-       # run: npm audit --json > audit-report.json
 
       - name: Upload audit report as artifact
         uses: actions/upload-artifact@v4
@@ -54,14 +53,13 @@ jobs:
           name: npm-audit-report
           path: audit-report.json
 
-#Tego jeszcze nie jestem pewna czy tak zostanie czy inny linter użyje
+#Linter
       - name: Super-linter
         continue-on-error: true
         uses: super-linter/super-linter@v7.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.SECRET_1 }}
           
-
           
   other_tests:
     needs: build
@@ -85,17 +83,7 @@ jobs:
           restore-keys: |
            npm-
 
-  #    - name: Check outdated
-   #     continue-on-error: true
-    #    run: npm outdated --json > outdated-report.json
-
-     # - name: Upload outdated report as artifact
-      #  uses: actions/upload-artifact@v4
-       # with:
-        #  name: npm-outdated-report
-         # path: outdated-report.json
-
-          #need to check if on sonar's side everything works
+          #Static test
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v3.1.0
         env:
@@ -106,27 +94,3 @@ jobs:
               -Dsonar.projectKey=kmnxa_tdm
               -Dsonar.sources=.
               
-
-#testing snyk
- #     - name: Run Snyk Code Analysis
-      #  continue-on-error: true
-  #      uses: snyk/actions/node@master
-   #     env:
-    #      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      #  with:
-     #     args: test --code --json > snyk-code-report.json
-
-
-   #   - name: Dependency Review
-    #    id: dep_rev
-     #   uses: actions/dependency-review-action@v4 
-
- #     - name: Save Dependency Review Report
-  #      run: |
-   #       echo "${{ steps.dependency_review.outputs.report }}" > dependency-review-report.json
-
-    #  - name: Upload Dependency Review Report as artifact
-     #   uses: actions/upload-artifact@v4
-      #  with:
-       #   name: dependency-review-report
-        #  path: dependency-review-report.json
