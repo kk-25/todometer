@@ -87,10 +87,10 @@ jobs:
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v3.1.0
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN2 }}
         with:
           args: >
-              -Dsonar.organization=cc1xmn4gt7
-              -Dsonar.projectKey=kmnxa_tdm
+              -Dsonar.organization=kk-25
+              -Dsonar.projectKey=kk-25_todometer
               -Dsonar.sources=.
               
